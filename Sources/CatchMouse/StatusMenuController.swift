@@ -63,13 +63,13 @@ final class StatusMenuController: NSObject {
         }
 
         menu.addItem(.separator())
-        menu.addItem(action("Move to Next Display   \(Shortcuts.nextCombo(store).displayString)", #selector(moveNext)))
-        menu.addItem(action("Move to Previous Display   \(Shortcuts.prevCombo(store).displayString)", #selector(movePrev)))
+        menu.addItem(action("Move to Next Display\(suffix(Shortcuts.nextCombo(store)))", #selector(moveNext)))
+        menu.addItem(action("Move to Previous Display\(suffix(Shortcuts.prevCombo(store)))", #selector(movePrev)))
 
         menu.addItem(.separator())
-        menu.addItem(action("Maximize Front Window   \(Shortcuts.maximizeCombo(store).displayString)", #selector(maximize)))
-        menu.addItem(action("Toggle Full Screen   \(Shortcuts.fullScreenCombo(store).displayString)", #selector(fullScreen)))
-        menu.addItem(action("Golden Ratio Window   \(Shortcuts.goldenCombo(store).displayString)", #selector(golden)))
+        menu.addItem(action("Maximize Front Window\(suffix(Shortcuts.maximizeCombo(store)))", #selector(maximize)))
+        menu.addItem(action("Toggle Full Screen\(suffix(Shortcuts.fullScreenCombo(store)))", #selector(fullScreen)))
+        menu.addItem(action("Golden Ratio Window\(suffix(Shortcuts.goldenCombo(store)))", #selector(golden)))
 
         menu.addItem(.separator())
         menu.addItem(action("Identify Displays", #selector(identify)))
@@ -92,6 +92,11 @@ final class StatusMenuController: NSObject {
         let item = NSMenuItem(title: title, action: selector, keyEquivalent: "")
         item.target = self
         return item
+    }
+
+    /// Menu suffix for a shortcut, empty when the action has no hotkey.
+    private func suffix(_ combo: KeyCombo?) -> String {
+        combo.map { "   \($0.displayString)" } ?? ""
     }
 
     private func disabled(_ title: String) -> NSMenuItem {

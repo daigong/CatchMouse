@@ -41,7 +41,7 @@ final class HotKeyRecorderView: NSView {
         } else if let combo {
             text = combo.displayString; color = .labelColor
         } else {
-            text = "Click to record"; color = .secondaryLabelColor
+            text = "Off — click to record"; color = .secondaryLabelColor
         }
         let attrs: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 12), .foregroundColor: color,

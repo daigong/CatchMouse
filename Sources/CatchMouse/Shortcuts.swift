@@ -21,15 +21,27 @@ enum Shortcuts {
 
     /// Effective jump combo for the display at `index` (left→right): the stored
     /// per-display binding if any, otherwise the positional default (first three
-    /// displays only). Returns `nil` if the display has no shortcut.
+    /// displays only). Returns `nil` when the user disabled it or the display
+    /// has no default.
     static func jumpCombo(index: Int, displayKey: String, store: HotKeyStore) -> KeyCombo? {
-        if let stored = store.binding(forDisplay: displayKey) { return stored }
-        return index < defaultJump.count ? defaultJump[index] : nil
+        switch store.binding(forDisplay: displayKey) {
+        case .bound(let combo): return combo
+        case .disabled: return nil
+        case .unset: return index < defaultJump.count ? defaultJump[index] : nil
+        }
     }
 
-    static func nextCombo(_ store: HotKeyStore) -> KeyCombo { store.nextBinding() ?? defaultNext }
-    static func prevCombo(_ store: HotKeyStore) -> KeyCombo { store.prevBinding() ?? defaultPrev }
-    static func maximizeCombo(_ store: HotKeyStore) -> KeyCombo { store.maximizeBinding() ?? defaultMaximize }
-    static func fullScreenCombo(_ store: HotKeyStore) -> KeyCombo { store.fullScreenBinding() ?? defaultFullScreen }
-    static func goldenCombo(_ store: HotKeyStore) -> KeyCombo { store.goldenBinding() ?? defaultGolden }
+    static func nextCombo(_ store: HotKeyStore) -> KeyCombo? { resolve(store.nextBinding(), defaultNext) }
+    static func prevCombo(_ store: HotKeyStore) -> KeyCombo? { resolve(store.prevBinding(), defaultPrev) }
+    static func maximizeCombo(_ store: HotKeyStore) -> KeyCombo? { resolve(store.maximizeBinding(), defaultMaximize) }
+    static func fullScreenCombo(_ store: HotKeyStore) -> KeyCombo? { resolve(store.fullScreenBinding(), defaultFullScreen) }
+    static func goldenCombo(_ store: HotKeyStore) -> KeyCombo? { resolve(store.goldenBinding(), defaultGolden) }
+
+    private static func resolve(_ binding: StoredBinding, _ fallback: KeyCombo) -> KeyCombo? {
+        switch binding {
+        case .unset: return fallback
+        case .disabled: return nil
+        case .bound(let combo): return combo
+        }
+    }
 }

@@ -97,29 +97,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        // Cycle keys.
-        let next = Shortcuts.nextCombo(store)
-        hotKeys.register(keyCode: next.keyCode, modifiers: next.carbonModifiers) { [weak self] in
-            self?.displays.moveToAdjacentDisplay(forward: true)
+        // Cycle keys. A cleared binding means "off", so skip registration.
+        if let next = Shortcuts.nextCombo(store) {
+            hotKeys.register(keyCode: next.keyCode, modifiers: next.carbonModifiers) { [weak self] in
+                self?.displays.moveToAdjacentDisplay(forward: true)
+            }
         }
-        let prev = Shortcuts.prevCombo(store)
-        hotKeys.register(keyCode: prev.keyCode, modifiers: prev.carbonModifiers) { [weak self] in
-            self?.displays.moveToAdjacentDisplay(forward: false)
+        if let prev = Shortcuts.prevCombo(store) {
+            hotKeys.register(keyCode: prev.keyCode, modifiers: prev.carbonModifiers) { [weak self] in
+                self?.displays.moveToAdjacentDisplay(forward: false)
+            }
         }
-
-        let maximize = Shortcuts.maximizeCombo(store)
-        hotKeys.register(keyCode: maximize.keyCode, modifiers: maximize.carbonModifiers) { [weak self] in
-            self?.perform(.maximize)
+        if let maximize = Shortcuts.maximizeCombo(store) {
+            hotKeys.register(keyCode: maximize.keyCode, modifiers: maximize.carbonModifiers) { [weak self] in
+                self?.perform(.maximize)
+            }
         }
-
-        let fullScreen = Shortcuts.fullScreenCombo(store)
-        hotKeys.register(keyCode: fullScreen.keyCode, modifiers: fullScreen.carbonModifiers) { [weak self] in
-            self?.perform(.fullScreen)
+        if let fullScreen = Shortcuts.fullScreenCombo(store) {
+            hotKeys.register(keyCode: fullScreen.keyCode, modifiers: fullScreen.carbonModifiers) { [weak self] in
+                self?.perform(.fullScreen)
+            }
         }
-
-        let golden = Shortcuts.goldenCombo(store)
-        hotKeys.register(keyCode: golden.keyCode, modifiers: golden.carbonModifiers) { [weak self] in
-            self?.perform(.golden)
+        if let golden = Shortcuts.goldenCombo(store) {
+            hotKeys.register(keyCode: golden.keyCode, modifiers: golden.carbonModifiers) { [weak self] in
+                self?.perform(.golden)
+            }
         }
     }
 
