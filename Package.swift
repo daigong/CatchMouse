@@ -10,6 +10,7 @@ let package = Package(
             path: "Sources/CatchMouse",
             linkerSettings: [
                 .linkedFramework("AppKit"),
+                .linkedFramework("ApplicationServices"),
                 .linkedFramework("Carbon"),
                 .linkedFramework("CoreGraphics"),
                 .linkedFramework("ColorSync")

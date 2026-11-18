@@ -12,6 +12,9 @@ final class HotKeyStore {
     private let perDisplayKey = "perDisplayBindings.v1"
     private let nextKey = "nextBinding.v1"
     private let prevKey = "prevBinding.v1"
+    private let maximizeKey = "maximizeBinding.v1"
+    private let fullScreenKey = "fullScreenBinding.v1"
+    private let goldenKey = "goldenBinding.v1"
 
     // MARK: - Per-display bindings
 
@@ -43,8 +46,14 @@ final class HotKeyStore {
 
     func nextBinding() -> KeyCombo? { combo(forKey: nextKey) }
     func prevBinding() -> KeyCombo? { combo(forKey: prevKey) }
+    func maximizeBinding() -> KeyCombo? { combo(forKey: maximizeKey) }
+    func fullScreenBinding() -> KeyCombo? { combo(forKey: fullScreenKey) }
+    func goldenBinding() -> KeyCombo? { combo(forKey: goldenKey) }
     func setNext(_ combo: KeyCombo?) { setCombo(combo, forKey: nextKey) }
     func setPrev(_ combo: KeyCombo?) { setCombo(combo, forKey: prevKey) }
+    func setMaximize(_ combo: KeyCombo?) { setCombo(combo, forKey: maximizeKey) }
+    func setFullScreen(_ combo: KeyCombo?) { setCombo(combo, forKey: fullScreenKey) }
+    func setGolden(_ combo: KeyCombo?) { setCombo(combo, forKey: goldenKey) }
 
     // MARK: - Reset
 
@@ -52,5 +61,8 @@ final class HotKeyStore {
         defaults.removeObject(forKey: perDisplayKey)
         defaults.removeObject(forKey: nextKey)
         defaults.removeObject(forKey: prevKey)
+        defaults.removeObject(forKey: maximizeKey)
+        defaults.removeObject(forKey: fullScreenKey)
+        defaults.removeObject(forKey: goldenKey)
     }
 }

@@ -5,6 +5,9 @@ enum MenuAction {
     case moveTo(Int)   // display index (0-based, left → right)
     case next
     case previous
+    case maximize
+    case fullScreen
+    case golden
     case openPreferences
     case identifyDisplays
 }
@@ -64,6 +67,11 @@ final class StatusMenuController: NSObject {
         menu.addItem(action("Move to Previous Display   \(Shortcuts.prevCombo(store).displayString)", #selector(movePrev)))
 
         menu.addItem(.separator())
+        menu.addItem(action("Maximize Front Window   \(Shortcuts.maximizeCombo(store).displayString)", #selector(maximize)))
+        menu.addItem(action("Toggle Full Screen   \(Shortcuts.fullScreenCombo(store).displayString)", #selector(fullScreen)))
+        menu.addItem(action("Golden Ratio Window   \(Shortcuts.goldenCombo(store).displayString)", #selector(golden)))
+
+        menu.addItem(.separator())
         menu.addItem(action("Identify Displays", #selector(identify)))
         let prefs = action("Preferences…", #selector(openPreferences))
         prefs.keyEquivalent = ","
@@ -97,6 +105,9 @@ final class StatusMenuController: NSObject {
     @objc private func moveToDisplay(_ sender: NSMenuItem) { onAction(.moveTo(sender.tag)) }
     @objc private func moveNext() { onAction(.next) }
     @objc private func movePrev() { onAction(.previous) }
+    @objc private func maximize() { onAction(.maximize) }
+    @objc private func fullScreen() { onAction(.fullScreen) }
+    @objc private func golden() { onAction(.golden) }
     @objc private func identify() { onAction(.identifyDisplays) }
     @objc private func openPreferences() { onAction(.openPreferences) }
     @objc private func quit() { NSApp.terminate(nil) }

@@ -11,6 +11,10 @@ import CoreGraphics
 /// and `CGEvent.location`.
 final class DisplayManager {
 
+    /// Called after a warp. Set by the menu-bar app to pulse the pointer size;
+    /// left unset by the one-shot CLI verbs.
+    var onCursorMoved: (() -> Void)?
+
     /// Active displays ordered left → right (then top → bottom) so that display
     /// numbering and next/previous cycling are stable and intuitive.
     func orderedDisplays() -> [CGDirectDisplayID] {
@@ -32,10 +36,12 @@ final class DisplayManager {
 
     /// Warp the cursor to the centre of the given display.
     func moveCursor(to id: CGDirectDisplayID) {
-        CGWarpMouseCursorPosition(center(of: id))
+        let target = center(of: id)
+        CGWarpMouseCursorPosition(target)
         // Re-associate so the next physical mouse movement continues smoothly
         // from the warped position rather than snapping back. (boolean_t == Int32)
         CGAssociateMouseAndMouseCursorPosition(1)
+        onCursorMoved?()
     }
 
     /// The display currently containing the cursor (falls back to the main display).

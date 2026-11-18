@@ -107,6 +107,20 @@ final class PreferencesWindowController: NSObject, NSWindowDelegate {
         let prevRec = recorder(Shortcuts.prevCombo(store)) { [weak self] c in self?.store.setPrev(c); self?.onChanged() }
         stack.addArrangedSubview(row("Previous display", prevRec))
 
+        let windowSep = NSBox()
+        windowSep.boxType = .separator
+        windowSep.translatesAutoresizingMaskIntoConstraints = false
+        windowSep.widthAnchor.constraint(equalToConstant: 412).isActive = true
+        stack.addArrangedSubview(windowSep)
+
+        stack.addArrangedSubview(sectionTitle("Window"))
+        let maximizeRec = recorder(Shortcuts.maximizeCombo(store)) { [weak self] c in self?.store.setMaximize(c); self?.onChanged() }
+        stack.addArrangedSubview(row("Maximize front window", maximizeRec))
+        let fullScreenRec = recorder(Shortcuts.fullScreenCombo(store)) { [weak self] c in self?.store.setFullScreen(c); self?.onChanged() }
+        stack.addArrangedSubview(row("Toggle full screen", fullScreenRec))
+        let goldenRec = recorder(Shortcuts.goldenCombo(store)) { [weak self] c in self?.store.setGolden(c); self?.onChanged() }
+        stack.addArrangedSubview(row("Golden ratio window", goldenRec))
+
         let identify = NSButton(title: "Identify Displays", target: self, action: #selector(identify))
         let reset = NSButton(title: "Reset to Defaults", target: self, action: #selector(resetDefaults))
         let buttons = NSStackView(views: [identify, reset])

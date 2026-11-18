@@ -13,6 +13,9 @@ scriptable equivalents that move the cursor once and exit:
   --move <n>            Warp the cursor to the centre of display <n> (1-based).
   --move-next, -n       Warp the cursor to the next display (wraps around).
   --move-prev, -p       Warp the cursor to the previous display (wraps around).
+  --maximize, -m        Maximize the focused window of the frontmost app.
+  --fullscreen, -f      Toggle full screen on the frontmost window.
+  --golden, -g          Resize the window to a centered golden rectangle.
   --version, -v         Print the version.
   --help, -h            Print this help.
 
@@ -20,6 +23,9 @@ Global hotkeys when running as the menu-bar agent (defaults — customise each i
 the menu-bar app's Preferences…):
   ⌃⌘, / ⌃⌘. / ⌃⌘/      Jump to the left / centre / right display.
   ⌃⌥→ / ⌃⌥←            Cycle to the next / previous display.
+  ⌃⌥↩                   Maximize the focused window (needs Accessibility).
+  ⌃⌥F                  Toggle full screen (needs Accessibility).
+  ⌃⌥G                  Golden-ratio window, centered (needs Accessibility).
 """
 
 /// Handles scriptable verbs. Returns a process exit code.
@@ -67,6 +73,42 @@ func runCLI(arguments: [String]) -> Int32 {
         usleep(40_000)
         print("prev: \(describe(from)) -> \(describe(cursor()))")
         return 0
+
+    case "--maximize", "-m":
+        guard WindowMaximizer.isTrusted else {
+            warn("Accessibility permission required: enable CatchMouse (or the calling terminal) in System Settings → Privacy & Security → Accessibility.")
+            return 1
+        }
+        if WindowMaximizer.maximize() {
+            print("maximized front window")
+            return 0
+        }
+        warn("no window could be maximized")
+        return 1
+
+    case "--fullscreen", "-f":
+        guard WindowMaximizer.isTrusted else {
+            warn("Accessibility permission required: enable CatchMouse (or the calling terminal) in System Settings → Privacy & Security → Accessibility.")
+            return 1
+        }
+        if WindowMaximizer.toggleFullScreen() {
+            print("toggled full screen")
+            return 0
+        }
+        warn("no window could be toggled full screen")
+        return 1
+
+    case "--golden", "-g":
+        guard WindowMaximizer.isTrusted else {
+            warn("Accessibility permission required: enable CatchMouse (or the calling terminal) in System Settings → Privacy & Security → Accessibility.")
+            return 1
+        }
+        if WindowMaximizer.goldenResize(animate: false) {
+            print("resized front window to golden ratio")
+            return 0
+        }
+        warn("no window could be resized")
+        return 1
 
     case "--version", "-v":
         print("CatchMouse \(appVersion)")
