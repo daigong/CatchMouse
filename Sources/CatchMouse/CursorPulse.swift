@@ -9,8 +9,8 @@ enum CursorPulse {
     private static let multiplier: Float = 3.5
     private static let maximumScale: Float = 4
     private static let growSeconds: TimeInterval = 0.15
-    private static let holdUntilSeconds: TimeInterval = 0.8
-    private static let lifetime: TimeInterval = 0.95
+    private static let holdUntilSeconds: TimeInterval = 0.5
+    private static let lifetime: TimeInterval = 0.6
     private static let savedScaleKey = "cursorPulse.originalScale"
 
     private static var timer: Timer?
